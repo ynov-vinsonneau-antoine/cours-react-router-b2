@@ -213,13 +213,13 @@ npm install tailwindcss @tailwindcss/vite
 ```
 
 ```ts
-// vite.config.ts
+// vite.config.ts — un import et un plugin à AJOUTER
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [react(), tailwindcss()],  // ← aux plugins déjà là
 })
 ```
 
@@ -235,42 +235,100 @@ Installez l'extension **Tailwind CSS IntelliSense** dans VS Code : elle complèt
 les classes et affiche le CSS correspondant au survol.
 
 </div>
-
 ---
-layout: center
-class: text-center
+class: code-xs
 ---
 
-<div class="tag tag-cyan mb-4">Exercice 0</div>
+<div class="tag tag-cyan mb-2">Exercice 0</div>
 
-# Créer le projet
+# Créer le projet <span class="timer ml-3">⏱ 10 minutes</span>
 
-<div class="timer mt-2">⏱ 10 minutes</div>
+<div class="grid grid-cols-2 gap-5 mt-3">
 
-<div class="mt-6 text-left mx-auto w-fit">
+<div>
 
-1. `npm create vite@latest gamerank -- --template react-ts`
-2. `npm install`, puis Tailwind avec les trois étapes de la slide précédente
-3. Créez les dossiers : `components/`, `pages/`, `hooks/`, `types/`, `data/`
-4. `npm run dev`, et mettez une classe Tailwind dans `App.tsx` pour vérifier
+<div class="tag tag-violet mb-1">1 · Le projet</div>
+
+```bash
+npm create vite@latest gamerank
+```
+
+| L'installeur demande | Vous répondez |
+|---|---|
+| Select a framework | **React** |
+| Select a variant | **TypeScript + React Compiler** |
+| Which linter to use? | **ESLint** |
+| Install and start now? | **No** |
+
+<div class="muted text-sm mt-2">Puis <code>cd gamerank</code> et <code>npm install</code>.</div>
 
 </div>
 
-<div class="mt-6 box good text-left">
-<span class="box-label">Checkpoint</span>
+<div>
 
-Votre page s'affiche sur un fond coloré par Tailwind, et les cinq dossiers existent.
-À partir de maintenant, tout ce qu'on voit, vous pouvez l'essayer tout de suite.
+<div class="tag tag-cyan mb-1">2 · Tailwind</div>
+
+```bash
+npm install tailwindcss @tailwindcss/vite
+```
+
+```ts
+// vite.config.ts — une ligne à ajouter
+import tailwindcss from '@tailwindcss/vite'
+plugins: [react(), babel(…), tailwindcss()],
+```
+
+```css
+/* src/index.css — tout en haut */
+@import "tailwindcss";
+```
+
+<div class="tag tag-amber mb-1 mt-2">3 · Le ménage</div>
+
+<div class="muted text-sm">Videz <code>index.css</code> sauf l'<code>@import</code>, <b>supprimez</b> <code>App.css</code>, videz <code>App.tsx</code>.</div>
 
 </div>
+
+</div>
+
+<div class="box good mt-1">
+<span class="box-label">4 · Les dossiers dans src/, puis on vérifie</span>
+
+`components/` `pages/` `hooks/` `types/` `data/`, puis `npm run dev` : testez une classe Tailwind.
+
+</div>
+
+<style>
+h1 { font-size: 2rem; margin-bottom: 0.4rem; }
+td, th { padding-top: 0.22rem !important; padding-bottom: 0.22rem !important; }
+.box { padding-top: 0.55rem; padding-bottom: 0.55rem; }
+</style>
 
 <!--
 Le seul moment de la séance où il faut vraiment circuler vite.
+
+L'installeur est INTERACTIF : s'ils répondent au hasard, on se retrouve avec trois
+configurations différentes dans la salle. Lire les quatre réponses à voix haute.
+La variante "TypeScript + React Compiler" est celle qui donne le vite.config.ts
+à trois plugins montré à droite.
+
+Le ménage : le template Vite livre 111 lignes dans index.css et
+184 dans App.css, purement décoratives. Celle qui fait le plus de dégâts :
+
+  #root { width: 1126px; text-align: center; border-inline: 1px solid ... }
+  h1 { font-size: 56px }
+
+Résultat s'ils ne nettoient pas : le contenu reste centré dans une colonne de
+1126px avec deux bordures verticales, et tous les h1 font 56px quoi qu'ils écrivent.
+Ils croiront que Tailwind ne marche pas, et l'exercice 2 sera faussé.
+
 Erreurs fréquentes :
-- oubli du double tiret dans la commande create vite
+- une autre variante choisie → leur vite.config.ts n'a que react(), c'est bon aussi,
+  ils ajoutent simplement tailwindcss() à côté
 - Tailwind installé mais l'import oublié dans src/index.css : rien ne change,
   et ils cherchent pendant dix minutes
-- version de Node trop ancienne : Vite exige Node 20+
+- index.css vidé EN ENTIER, @import compris : plus aucune classe ne s'applique
+- version de Node trop ancienne : Vite 8 exige Node 20+
 
 Les dossiers hooks/ et types/ seront vides jusqu'à plus tard. C'est normal, le dire.
 
@@ -285,7 +343,7 @@ layout: section
 
 # Bonnes pratiques
 
-<div class="muted mt-2">Quatre règles, et une arborescence de projet</div>
+<div class="muted mt-2">Trois règles, et une arborescence de projet</div>
 
 ---
 layout: center
@@ -317,7 +375,7 @@ Vous ajoutez une fonctionnalité sans relire tout le reste.
 
 <div class="mt-8 big" v-click>
 
-Les quatre règles qui suivent ne sont pas des goûts personnels.<br/>
+Les trois règles qui suivent ne sont pas des goûts personnels.<br/>
 Chacune évite un **bug précis** que vous allez rencontrer.
 
 </div>
@@ -336,7 +394,7 @@ Chaque règle = un bug. C'est le seul argument qui les fait accrocher.
 <div v-if="$clicks < 2">
 
 ```tsx
-function TierListPage() {
+const TierListPage = () => {
   // 25 lignes de state
   // 20 lignes de fonctions
   return (
@@ -357,7 +415,7 @@ function TierListPage() {
 <div class="box good">
 
 ```tsx
-function TierListPage() {
+const TierListPage = () => {
   return (
     <>
       <PageTitre texte="Ma tier list" />
@@ -398,7 +456,7 @@ impossible de travailler à deux dessus sans conflit git.
 <div v-if="$clicks < 3">
 
 ```tsx
-function GameCard(props: any) {
+const GameCard = (props: any) => {
   return <h2>{props.titre}</h2>
 }
 ```
@@ -422,7 +480,7 @@ type GameCardProps = {
   onSelect?: (slug: string) => void
 }
 
-function GameCard({ game, onSelect }: GameCardProps) {
+const GameCard = ({ game, onSelect }: GameCardProps) => {
   return <h2>{game.titre}</h2>
 }
 ```
@@ -457,9 +515,9 @@ type GameCardProps = {
   note: number
   nouveau?: boolean
 }
-export default function GameCard(
+const GameCard = (
   { titre, note, nouveau }: GameCardProps
-) {
+) => {
   return (
     <article>
       <h2>{titre} — {note}/10</h2>
@@ -467,6 +525,7 @@ export default function GameCard(
     </article>
   )
 }
+export default GameCard
 ```
 
 </div>
@@ -477,7 +536,7 @@ export default function GameCard(
 
 ```tsx
 import GameCard from '../components/GameCard'
-export default function HomePage() {
+const HomePage = () => {
   return (
     <div>
       <GameCard titre="Hades" note={9.5} nouveau />
@@ -519,87 +578,7 @@ partout ailleurs dans le cours.
 
 ---
 
-# 3 · Ce qui se calcule ne se stocke pas
-
-<div class="muted -mt-3 mb-4 text-sm">le state dérivé</div>
-
-```tsx {all|2-3|5-8}
-function TierListPage({ games }: TierListPageProps) {
-  const [nbJeuxS, setNbJeuxS] = useState(0)
-  const [moyenne, setMoyenne] = useState(0)
-
-  useEffect(() => {
-    setNbJeuxS(games.filter((g) => g.tier === 'S').length)
-    setMoyenne(games.reduce((s, g) => s + g.note, 0) / games.length)
-  }, [games])
-
-  return <p>{nbJeuxS} jeux en S · moyenne {moyenne}</p>
-}
-```
-
-<div class="mt-3 big" v-click>Deux problèmes. Lesquels ?</div>
-
-<div v-click class="mt-3">
-
-<div class="box bad">
-
-Au **premier rendu**, l'écran affiche `0 jeux en S · moyenne 0`.
-Et ces deux valeurs peuvent se désynchroniser des données : deux vérités pour la même info.
-
-</div>
-
-</div>
-
----
-
-# 3 · la version juste
-
-<div v-if="$clicks < 5">
-
-```tsx
-function TierListPage({ games }: TierListPageProps) {
-  const nbJeuxS = games.filter((g) => g.tier === 'S').length
-  const moyenne = games.reduce((s, g) => s + g.note, 0) / games.length
-
-  return <p>{nbJeuxS} jeux en S · moyenne {moyenne}</p>
-}
-```
-
-</div>
-
-<v-clicks>
-
-- Pas de `useState`, pas de `useEffect`
-- Impossible d'être désynchronisé : il n'y a plus qu'une source
-- 4 lignes au lieu de 11
-
-</v-clicks>
-
-<div class="box rule mt-5" v-click>
-<span class="box-label">La règle</span>
-
-Posez-vous toujours la question : **est-ce que je peux le calculer ?**
-Si oui, c'est une variable. Pas un state.
-
-</div>
-
-<div class="box trap mt-3" v-click>
-<span class="box-label">Corollaire</span>
-
-Et on ne **modifie jamais** une donnée reçue. `games.sort()` réordonne le tableau
-d'origine et React ne s'en aperçoit pas. Écrivez `[...games].sort()` ou `games.toSorted()`.
-
-</div>
-
-<!--
-Le "est-ce que je peux le calculer ?" est LA question à leur répéter tout le semestre.
-Un useEffect qui fait un setState avec des données déjà présentes est presque
-toujours un bug en attente.
--->
-
----
-
-# 4 · Une liste a besoin d'étiquettes qui ne bougent pas
+# 3 · Une liste a besoin d'étiquettes qui ne bougent pas
 
 <div class="muted -mt-3 mb-4 text-sm">la prop <code>key</code></div>
 
@@ -655,95 +634,126 @@ Un index répond « est-ce à la même position ? ». Ce n'est pas la même ques
 
 ---
 layout: center
-class: text-center
+class: code-xs
 ---
 
-<div class="tag tag-amber mb-4">Quiz · 30 secondes</div>
+<div class="text-center">
+<div class="tag tag-amber mb-3">Quiz · 30 secondes</div>
 
 # Combien d'erreurs ?
 
+</div>
+
+<div class="grid grid-cols-2 gap-5 mt-4">
+
+<div>
+
 ```tsx
-function GameCard(props: any) {
-  const [note, setNote] = useState(0)
+type GameListProps = {
+  games: Game[]
+}
 
-  useEffect(() => {
-    setNote(props.game.note)
-  }, [props.game])
-
-  return <p>{props.game.titre} — {note}/10</p>
+const GameList = (props: any) => {
+  return (
+    <div>
+      {props.games.map((game) => (
+        <GameCard game={game} />
+      ))}
+    </div>
+  )
 }
 ```
 
-<div v-click class="mt-6">
+</div>
 
-<div class="box info text-left">
+<div v-click>
 
-**Deux.** `props: any` au lieu d'un type, et un state qui recopie une prop.
+<div class="box info">
 
-La version juste tient en deux lignes : `{ game }: GameCardProps`,
-puis directement `{game.note}` dans le TSX.
+**Deux.** Le type existe juste au-dessus, mais le composant reçoit `any`.
+Et la `key` manque sur la liste.
+
+```tsx
+const GameList = ({ games }: GameListProps) => {
+  return (
+    <div>
+      {games.map((game) => (
+        <GameCard key={game.slug} game={game} />
+      ))}
+    </div>
+  )
+}
+```
 
 </div>
 
 </div>
-
----
-
-# Pour aller plus loin
-
-Quatre choses à connaître, qu'on ne développe pas aujourd'hui.
-
-<v-clicks>
-
-- **Sortir la logique du TSX** — un `.filter().sort().slice()` dans le `return` se met dans une variable au-dessus. Le TSX décrit ce qui s'affiche, pas comment on le calcule.
-- **La composition avec `children`** — quand un composant accumule six props booléennes, c'est qu'il devrait accepter du contenu à la place.
-- **Les union types** — `type Tier = 'S' | 'A' | 'B' | 'C'` plutôt que `string`. TypeScript refuse alors `'Z'` à la compilation.
-- **Les hooks personnalisés** — quand la même logique sert dans deux composants, elle sort dans une fonction qui commence par `use`.
-
-</v-clicks>
-
-<div class="box info mt-6" v-click>
-
-Gardez-les dans un coin de la tête. Vous en aurez besoin sur votre projet.
 
 </div>
 
 ---
-layout: center
-class: text-center
+class: code-xs
 ---
 
-<div class="tag tag-cyan mb-4">Exercice 1</div>
+<div class="text-center">
+<div class="tag tag-cyan mb-2">Exercice 1</div>
 
-# Vos données, vos composants
-
-<div class="timer mt-2">⏱ 10 minutes</div>
-
-<div class="mt-6 text-left mx-auto w-fit">
-
-1. Dans `types/game.ts`, écrivez le type `Game` : titre, studio, année, note
-2. Dans `data/games.ts`, un tableau `games: Game[]` avec **vos** 5 jeux préférés
-3. Un composant `GameCard` avec un type de props explicite. Au bon endroit.
-4. Affichez la liste dans `App.tsx`, avec une `key` stable
+# Les données et la carte <span class="timer ml-3">⏱ 10 minutes</span>
 
 </div>
 
-<div class="mt-6 box good text-left">
+<div class="grid grid-cols-2 gap-5 mt-4 text-sm">
+
+<div>
+
+1. Dans `types/game.ts`, le type `Game` : titre, studio, année, note
+2. Dans `data/games.ts`, un tableau `games: Game[]`
+3. Remplissez-le avec **les jeux ci-contre** : à vous de trouver le studio, l'année et de mettre votre note
+4. Un composant `GameCard` avec un type de props explicite. **Au bon endroit.**
+5. Affichez la liste dans `App.tsx`, avec une `key` stable
+
+</div>
+
+<div>
+
+<div class="box">
+<span class="box-label">Les jeux à saisir</span>
+
+- League of Legends
+- World of Warcraft
+- Valorant
+- Pokémon Champions
+- God of War Ragnarök
+- EA Sports FC
+
+</div>
+
+</div>
+
+</div>
+
+<div class="box good mt-3">
 <span class="box-label">Checkpoint</span>
 
-Vos 5 jeux s'affichent. Zéro `any`, zéro `key={index}`, et `GameCard.tsx`
-est dans `components/`, pas dans `pages/`.
+Les six jeux s'affichent. Zéro `any`, zéro `key={index}`, et `GameCard.tsx` est dans
+`components/`, pas dans `pages/`. Ne stylez rien : c'est la partie 2.
 
 </div>
 
-<div class="mt-4 text-sm" style="color: var(--gr-amber)">
-
-Ne stylez rien pour l'instant : c'est la partie 2.
-
-</div>
+<style>
+h1 { font-size: 2rem; margin-bottom: 0.4rem; }
+.box { padding-top: 0.55rem; padding-bottom: 0.55rem; }
+</style>
 
 <!--
-Les quatre règles qu'on vient de voir sont toutes exerçables ici. Circuler et
+La liste est imposée pour deux raisons : ils ne perdent pas cinq minutes à choisir,
+et tout le monde a les mêmes données à l'écran au moment de la correction.
+Le travail reste le leur : studio, année, note.
+
+À DIRE À L'ORAL : la note n'est pas un chiffre, c'est un rang — S, A, B, C ou D.
+Sinon ils partent sur un number et la carte de l'exercice 2 ne collera pas.
+
+Les trois règles qu'on vient de voir sont toutes exerçables ici. Circuler et
 poser la question qui va bien plutôt que corriger :
 - "ce composant, tu peux le nommer en un seul mot ?"
 - "c'est quoi le type de cette prop ?"
@@ -752,7 +762,11 @@ poser la question qui va bien plutôt que corriger :
 Erreurs fréquentes :
 - GameCard rangé dans pages/ : c'est LE point de l'exo, les reprendre dessus
 - key={index} par réflexe, alors qu'on vient d'en parler
-- un useState pour le nombre de jeux, alors que games.length suffit
+- note="9.5" entre guillemets, donc une string
+
+S'ils demandent : la note est la LEUR, il n'y a pas de bonne réponse.
+Pour les jeux-services (LoL, WoW, Valorant, FC), l'année est celle de la sortie
+initiale — leur dire, sinon ils cherchent longtemps.
 -->
 ---
 layout: section
@@ -970,19 +984,32 @@ class: text-center
 
 <div class="tag tag-cyan mb-4">Exercice 2</div>
 
-# Reproduisez cette carte
+# Reproduisez cette liste
 
 <div class="timer mt-2">⏱ 12 minutes</div>
 
 <div class="flex justify-center gap-8 mt-6 items-start">
 
+<div class="text-left">
+
 <div class="demo-card">
+  <div class="demo-card-badge">A</div>
+  <div>
+    <div class="demo-card-title">League of Legends</div>
+    <div class="demo-card-studio">Riot Games · 2009</div>
+  </div>
+</div>
+
+<div class="demo-card mt-3">
   <div class="demo-card-badge">S</div>
   <div>
-    <div class="demo-card-title">Hollow Knight</div>
-    <div class="demo-card-studio">Team Cherry · 2017</div>
+    <div class="demo-card-title">World of Warcraft</div>
+    <div class="demo-card-studio">Blizzard Entertainment · 2004</div>
   </div>
-  <div class="demo-card-note">9.5</div>
+</div>
+
+<div class="muted text-center mt-3" style="letter-spacing: 0.35em">···</div>
+
 </div>
 
 <div class="text-left text-sm">
@@ -991,11 +1018,11 @@ class: text-center
 <span class="box-label">Le cahier des charges</span>
 
 - Tout en **Tailwind**, aucun fichier `.css`
-- Ligne horizontale, éléments centrés verticalement
+- Une carte = une ligne horizontale, éléments centrés verticalement
 - Fond sombre, coins arrondis, `padding` confortable
 - Le badge : carré, coloré, texte en gras
 - Le titre en clair, le studio plus petit et plus terne
-- La note poussée à droite
+- Les cartes empilées, même espace entre chacune
 - Au survol : le fond s'éclaircit
 
 </div>
@@ -1008,24 +1035,31 @@ class: text-center
 
 <!--
 Écrire au tableau les 3 classes qu'ils ne devineront pas :
-  items-center   (alignement vertical)
-  ml-auto        (pousser la note à droite)
+  items-center   (alignement vertical dans la carte)
+  flex-col gap-3 (l'empilement régulier de la liste)
   hover:bg-...   (le survol)
 
 Solution :
-<article className="flex items-center gap-4 p-4 rounded-xl bg-slate-800
-                    hover:bg-slate-700 transition-colors">
-  <div className="grid place-items-center w-10 h-10 rounded-lg
-                  bg-rose-500 font-bold text-slate-900">S</div>
-  <div>
-    <h2 className="font-semibold text-slate-50">Hollow Knight</h2>
-    <p className="text-sm text-slate-400">Team Cherry · 2017</p>
-  </div>
-  <span className="ml-auto font-mono text-lg text-slate-200">9.5</span>
-</article>
+<div className="flex flex-col gap-3">
+  {games.map((game) => (
+    <article key={game.id}
+      className="flex items-center gap-4 p-4 rounded-xl bg-slate-800
+                 hover:bg-slate-700 transition-colors">
+      <div className="grid place-items-center w-10 h-10 rounded-lg
+                      bg-rose-500 font-bold text-slate-900">{game.note}</div>
+      <div>
+        <h2 className="font-semibold text-slate-50">{game.titre}</h2>
+        <p className="text-sm text-slate-400">{game.studio} · {game.annee}</p>
+      </div>
+    </article>
+  ))}
+</div>
 
 Ne pas donner la solution avant 9 minutes. Faire corriger par un étudiant
 au vidéoprojecteur pendant que les autres dictent.
+
+Ils réutilisent le GameCard de l'exercice 1 : le travail ici, c'est le style,
+pas la structure. Le badge affiche la note, qui est un rang (S/A/B/C/D).
 -->
 
 ---
@@ -1056,7 +1090,7 @@ Votre application n'a qu'une page. Alors on bricole.
 <div v-if="$clicks < 6">
 
 ```tsx
-function App() {
+const App = () => {
   const [page, setPage] = useState('accueil')
 
   return (
@@ -1133,8 +1167,9 @@ Votre state React survit.
 <div class="box info">
 <span class="box-label">Démo — ouvrez l'onglet Réseau de vos devtools</span>
 
-Je clique sur un `<a href="/tier-list">`. Regardez la liste des requêtes.
+D'abord, la librairie qui fournit `<Link>` : `npm install react-router-dom`
 
+Je clique sur un `<a href="/tier-list">`. Regardez la liste des requêtes.
 Puis sur un `<Link to="/tier-list">`. Regardez encore.
 
 </div>
@@ -1147,7 +1182,8 @@ NE PAS SAUTER CETTE DÉMO. C'est le moment où ça devient concret.
 - Avec <Link> : rien du tout, zéro requête.
 Encore plus parlant : mettre un compteur useState visible à l'écran.
 Avec <a href> il retombe à 0, avec <Link> il survit.
-Leur faire refaire sur leur machine avant de continuer.
+Leur faire refaire sur leur machine avant de continuer — d'où l'installation
+annoncée ici, avant la slide suivante qui la reprend comme référence.
 -->
 
 ---
@@ -1161,7 +1197,7 @@ Leur faire refaire sur leur machine avant de continuer.
 ```tsx {all|5|6|7-8}
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
-function App() {
+const App = () => {
   return (
     <BrowserRouter>
       <Routes>
@@ -1327,7 +1363,7 @@ Et pire : à chaque navigation le `Menu` est **démonté puis reconstruit**.
 ```tsx {all|7}
 import { Outlet } from 'react-router-dom'
 
-export default function Layout() {
+const Layout = () => {
   return (
     <div className="min-h-screen bg-slate-900 text-slate-100">
       <Menu />
@@ -1336,6 +1372,7 @@ export default function Layout() {
     </div>
   )
 }
+export default Layout
 ```
 
 <div class="muted text-sm mt-3">La partie fixe, avec un trou au milieu. Reste à dire quelles pages vont dans ce trou.</div>
@@ -1413,7 +1450,7 @@ Une seule route, un seul composant, autant de pages que de jeux.
 import { useParams } from 'react-router-dom'
 import { games } from '../data/games'
 
-export default function GameDetailPage() {
+const GameDetailPage = () => {
   const { slug } = useParams()
 
   const game = games.find((g) => g.slug === slug)
@@ -1424,6 +1461,7 @@ export default function GameDetailPage() {
 
   return <h1>{game.titre}</h1>
 }
+export default GameDetailPage
 ```
 
 <div class="box trap mt-3" v-click>
@@ -1575,9 +1613,7 @@ Erreurs fréquentes :
 
 - Un composant, une seule chose
 - Des props typées, jamais `any`
-- Calculable ⇒ variable, pas state
 - `key` stable, jamais l'index
-- On ne modifie rien en place
 - `pages/` `components/` `hooks/` `types/` `data/`
 
 </div>
@@ -1613,7 +1649,7 @@ Erreurs fréquentes :
 
 <div class="mt-6 text-center big" v-click>
 
-L'URL est un état. Et si vous pouvez le calculer, ne le stockez pas.
+L'URL est un état : le seul que l'utilisateur peut copier, partager et recharger.
 
 </div>
 
@@ -1655,7 +1691,7 @@ Un nouveau champ dans le type `Game`, une nouvelle page.
 - Librairies autorisées, sauf les kits de composants tout faits.
 - L'IA pour **le contenu**, jamais pour le code.
 - Date de sortie et studio doivent être **exacts**. Vérifiez-les.
-- Les quatre règles du cours s'appliquent aussi ici : un composant une seule chose, des props typées, une `key` stable, et rien de calculable dans un state.
+- Les trois règles du cours s'appliquent aussi ici : un composant une seule chose, des props typées, une `key` stable.
 
 </div>
 

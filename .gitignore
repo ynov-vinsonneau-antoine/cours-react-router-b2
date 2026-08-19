@@ -27,3 +27,6 @@ desktop.ini
 .env
 .env.local
 .env.*.local
+
+# Exports de vérification
+.shots/

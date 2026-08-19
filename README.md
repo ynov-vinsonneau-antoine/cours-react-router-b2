@@ -1,6 +1,6 @@
 # GameRank — Bonnes pratiques, Tailwind et routage
 
-Cours 2h, React + TypeScript. 40 slides, 5 exercices machine, 2 quiz.
+Cours 2h, React + TypeScript. 37 slides, 5 exercices machine, 2 quiz.
 
 Fil rouge : **GameRank**, la tier list des jeux préférés des élèves.
 Données locales dans un `games.ts` typé, aucun appel réseau.
@@ -26,11 +26,11 @@ npm run dev          # http://localhost:3030
 |---|---|---|---|
 | | Ouverture | 1–3 | 5 min |
 | **0** | **On monte le projet** | 4–6 · **exo 7** | 17 min |
-| 1 | Bonnes pratiques | 8–17 · **exo 18** | 35 min |
-| 2 | Tailwind CSS | 19–23 · **exo 24** | 27 min |
-| | Pause | 25 | 10 min |
-| 3 | Routage et navigation | 26–37 · **exos 30 et 38** | 60 min |
-| | Récap et TP | 39–40 | 5 min |
+| 1 | Bonnes pratiques | 8–14 · **exo 15** | 28 min |
+| 2 | Tailwind CSS | 16–20 · **exo 21** | 27 min |
+| | Pause | 22 | 10 min |
+| 3 | Routage et navigation | 23–34 · **exos 27 et 35** | 60 min |
+| | Récap et TP | 36–37 | 5 min |
 
 Le projet se monte **avant** les bonnes pratiques : dès la minute 20, ils ont un
 projet qui tourne et peuvent essayer chaque règle en direct. Et si quelqu'un a un
@@ -46,40 +46,38 @@ souci de Node ou de `npm`, tu le découvres tôt, pas à mi-parcours.
 | 10 | 1 · Un composant fait une seule chose |
 | 11 | 2 · Un composant annonce ce qu'il reçoit |
 | 12 | 2 · **Les props en pratique** — déclarer, typer, utiliser |
-| 13–14 | 3 · Ce qui se calcule ne se stocke pas (+ immutabilité) |
-| 15 | 4 · Une liste a besoin d'étiquettes qui ne bougent pas |
-| 16 | Quiz · combien d'erreurs ? |
-| 17 | Pour aller plus loin (cité, pas développé) |
-| 20–23 | CSS classique · les deux versions · comment ça marche · responsive |
-| 27 | Le problème · l'URL est un état |
-| 28 | SPA vs site classique + **démo devtools** |
-| 29 | Les trois briques |
-| 31 | `Link` et `NavLink` |
-| 32–33 | Le menu dupliqué → `Layout` + `Outlet` |
-| 34–35 | Route `:slug` puis `useParams` |
-| 36 | `useNavigate` et la route 404 |
-| 37 | Quiz · page blanche, pourquoi ? |
-| 40 | **Le sujet du TP** |
+| 13 | 3 · Une liste a besoin d'étiquettes qui ne bougent pas |
+| 14 | Quiz · combien d'erreurs ? |
+| 17–20 | CSS classique · les deux versions · comment ça marche · responsive |
+| 24 | Le problème · l'URL est un état |
+| 25 | SPA vs site classique + **démo devtools** |
+| 26 | Les trois briques |
+| 28 | `Link` et `NavLink` |
+| 29–30 | Le menu dupliqué → `Layout` + `Outlet` |
+| 31–32 | Route `:slug` puis `useParams` |
+| 33 | `useNavigate` et la route 404 |
+| 34 | Quiz · page blanche, pourquoi ? |
+| 37 | **Le sujet du TP** |
 
 ## Les cinq exercices
 
 | Slide | Exercice | Durée | Livrable |
 |---|---|---|---|
 | 7 | **Exo 0** — Créer le projet | 10 min | Vite + TS + Tailwind, les 5 dossiers, `npm run dev` qui tourne |
-| 18 | **Exo 1** — Vos données, vos composants | 10 min | Le type `Game`, `games.ts`, un `GameCard` typé au bon endroit |
-| 24 | **Exo 2** — Reproduire une carte en Tailwind | 12 min | La carte affichée sur la slide, en Tailwind seul |
-| 30 | **Exo 3** — Trois pages, trois routes | 8 min | Les 3 URL répondent |
-| 38 | **Exo 4** — Le layout et la page détail | 12 min | `Outlet`, routes imbriquées, `/jeux/:slug`, 404 |
+| 15 | **Exo 1** — Les données et la carte | 10 min | Le type `Game`, `games.ts` rempli avec les 6 jeux imposés, un `GameCard` typé au bon endroit |
+| 21 | **Exo 2** — Reproduire la liste en Tailwind | 12 min | Les cartes affichées sur la slide, en Tailwind seul |
+| 27 | **Exo 3** — Trois pages, trois routes | 8 min | Les 3 URL répondent |
+| 35 | **Exo 4** — Le layout et la page détail | 12 min | `Outlet`, routes imbriquées, `/jeux/:slug`, 404 |
 
-L'exo 0 est de la plomberie pure. L'exo 1 est celui qui **applique les quatre règles** —
+L'exo 0 est de la plomberie pure. L'exo 1 est celui qui **applique les trois règles** —
 c'est là qu'il faut circuler et poser des questions plutôt que corriger.
 
-La **solution de l'exercice 2** est en note présentateur sur la slide 24, avec les
-3 classes à écrire au tableau (`items-center`, `ml-auto`, `hover:`).
+La **solution de l'exercice 2** est en note présentateur sur la slide 21, avec les
+3 classes à écrire au tableau (`items-center`, `flex-col gap-3`, `hover:`).
 
 ## Le rythme des bonnes pratiques
 
-Les slides 10, 11, 13 et 15 suivent toutes le même schéma :
+Les slides 10, 11 et 13 suivent toutes le même schéma :
 
 > **code cassé affiché → « qu'est-ce qui cloche ? » → ils cherchent à voix haute → clic → la règle**
 
@@ -90,7 +88,7 @@ La slide 12 est l'exception : c'est la seule slide « démonstration » de la pa
 Elle complète la règle 2 en montrant le **côté appelant**
 (`<GameCard titre="Hades" note={9.5} />`), que la slide 11 ne montre jamais.
 
-## Le TP — slide 40
+## Le TP — slide 37
 
 Sujet retenu : **le carnet de recettes**, un projet neuf, refait de A à Z, pour
 qu'ils recâblent eux-mêmes le router et le layout au lieu de prolonger GameRank.
@@ -100,23 +98,22 @@ qu'ils recâblent eux-mêmes le router et le layout au lieu de prolonger GameRan
 - style libre, librairies autorisées sauf les kits de composants tout faits
 - l'IA pour **le contenu**, jamais pour le code
 
-**La slide 40 présente encore l'ancienne version du TP (GameRank v2). Elle est à
+**La slide 37 présente encore l'ancienne version du TP (GameRank v2). Elle est à
 réécrire en carnet de recettes.**
 
 ## Timing
 
-À plein régime le deck fait **~155 min** pour un créneau de 120. C'est assumé :
+À plein régime le deck fait **~145 min** pour un créneau de 120. C'est assumé :
 tu accélères en direct là où le groupe suit, et tu t'attardes où ça coince.
 
 Les leviers, du plus rentable au moins :
 
 1. **Donner l'exo 0 en amont** — « arrivez avec un projet Vite + Tailwind créé ».
    Tu vérifies l'arborescence en 3 min au lieu de 10. → **−7 min**
-2. **Slide 17** (pour aller plus loin) à l'oral en 30 s. → **−2 min**
-3. **Slide 6** (setup) au rythme rapide, ils n'ont rien à noter. → **−2 min**
-4. **Exo 4** à 10 min : le TP le reprend de toute façon. → **−2 min**
+2. **Slide 6** (setup) au rythme rapide, ils n'ont rien à noter. → **−2 min**
+3. **Exo 4** à 10 min : le TP le reprend de toute façon. → **−2 min**
 
-**À ne jamais couper :** la démo devtools (slide 28), les slides 5 et 12, et l'exercice 4.
+**À ne jamais couper :** la démo devtools (slide 25), les slides 5 et 12, et l'exercice 4.
 
 ## Notes présentateur
 
@@ -170,6 +167,9 @@ de `slides.md`.
 
 ## Éditer slides.md
 
+- **Convention de code du deck** : les composants sont écrits en fonctions fléchées
+  (`const HomePage = () => { ... }`), jamais `function HomePage()`. C'est ce que
+  génère `rafce` et c'est la façon dont tu codes en direct — ne pas mélanger les deux formes.
 - `<v-clicks>` révèle une liste élément par élément, `v-click` révèle un `<div>`
 - une fence de code avec `{all|1|2-3}` révèle le code progressivement au fil des clics
 - Classes maison : `.box` + `.bad` / `.good` / `.rule` / `.trap` / `.info`,
@@ -185,7 +185,7 @@ un index plus petit qu'au parent, donc le parent reste invisible pendant que ses
 La parade est d'aplatir avec des index explicites — un `v-click="1"` sur le bloc parent,
 puis un `<v-clicks at="2">` pour la liste.
 
-**2. Les seuils de `v-if="$clicks < n"`.** Sept slides (10, 11, 14, 15, 27, 29, 33) font
+**2. Les seuils de `v-if="$clicks < n"`.** Six slides (10, 11, 13, 24, 26, 30) font
 disparaître leur premier bloc de code au reveal, via un seuil écrit en dur.
 Si tu **ajoutes un clic** sur une de ces slides, mets le seuil à jour, sinon le code
 disparaît au mauvais moment.
@@ -208,7 +208,7 @@ encadré à la slide 12. Après tout ajout, exporte en PNG et regarde le dernier
 
 ### Synchroniser une surbrillance de code avec son explication
 
-La slide 29 est le modèle. Les étapes du bloc de code et les puces partagent le même
+La slide 26 est le modèle. Les étapes du bloc de code et les puces partagent le même
 compteur de clics : la fence `{all|5|6|7-8}` prend les clics 1, 2 et 3, donc les trois
 puces portent `v-click="1"`, `v-click="2"` et `v-click="3"`. Chaque clic surligne une
 ligne **et** fait apparaître son explication.

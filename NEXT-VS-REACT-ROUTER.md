@@ -94,7 +94,7 @@ Elle ne produit pas toujours un message clair.
 ```
 
 Les chemins enfants se **concatènent** au parent : ça donne `//tier-list`.
-Aucune erreur, aucun warning, page blanche. C'est le quiz de la slide 33.
+Aucune erreur, aucun warning, page blanche. C'est le quiz de la slide 34.
 
 **4. `useParams()` renvoie `string | undefined`**
 
