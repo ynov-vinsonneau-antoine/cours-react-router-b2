@@ -509,7 +509,7 @@ class: code-xs
 ```tsx
 type GameCardProps = {
   name: string
-  note: number
+  note: "S" | "A" | "B" | "C" | "D"
   isNew?: boolean
 }
 const GameCard = (
@@ -517,7 +517,7 @@ const GameCard = (
 ) => {
   return (
     <article>
-      <h2>{name} — {note}/10</h2>
+      <h2>{name} — rang {note}</h2>
       {isNew && <span>NOUVEAU</span>}
     </article>
   )
@@ -536,8 +536,8 @@ import GameCard from '../components/GameCard'
 const HomePage = () => {
   return (
     <div>
-      <GameCard name="Hades" note={9.5} isNew />
-      <GameCard name="Celeste" note={9} />
+      <GameCard name="Hades" note="S" isNew />
+      <GameCard name="Celeste" note="A" />
     </div>
   )
 }
@@ -547,7 +547,7 @@ const HomePage = () => {
 <span class="box-label">Trois réflexes</span>
 
 - Le `?` rend la prop **facultative**.
-- Guillemets pour une string, accolades pour le reste : `name="Hades"` mais `note={9.5}`.
+- Guillemets pour une string, accolades pour le reste : `name="Hades"` mais `isNew={true}`.
 - Un composant ne **modifie jamais** ses props.
 
 </div>
@@ -560,8 +560,11 @@ const HomePage = () => {
 La slide précédente montre comment TYPER les props. Celle-ci montre comment
 les UTILISER — c'est le morceau qui leur manque toujours.
 
+Sur Hades, `isNew` est écrit tout court : c'est le raccourci de `isNew={true}`. Le dire,
+sinon ils cherchent où est passée la valeur. Ça ne marche que pour un booléen à true.
+
 Les deux erreurs à guetter au TP :
-- note="9.5" avec des guillemets : c'est alors une string, et les calculs cassent
+- note="E" : TypeScript refuse, "E" n'est pas dans l'union. C'est tout l'intérêt du type littéral.
 - vouloir modifier une prop dans le composant (name = name.toUpperCase())
 
 Si quelqu'un connaît Next et écrit `@/components/GameCard` : cet alias n'existe pas
