@@ -109,7 +109,7 @@ Styler sans jamais chercher un nom de classe.
 <div class="box" v-click>
 <span class="box-label" style="color: var(--gr-pink)">Partie 3 · 45 min</span>
 
-### Routage
+### Routage et navigation
 
 Passer d'une page à cinq, sans recharger.
 
@@ -239,9 +239,7 @@ les classes et affiche le CSS correspondant au survol.
 class: code-xs
 ---
 
-<div class="tag tag-cyan mb-2">Exercice 0</div>
-
-# Créer le projet <span class="timer ml-3">⏱ 10 minutes</span>
+# <span class="tag tag-cyan mr-3">Exo 0</span>Créer le projet <span class="timer ml-3">⏱ 10 minutes</span>
 
 <div class="grid grid-cols-2 gap-5 mt-3">
 
@@ -457,7 +455,7 @@ impossible de travailler à deux dessus sans conflit git.
 
 ```tsx
 const GameCard = (props: any) => {
-  return <h2>{props.titre}</h2>
+  return <h2>{props.name}</h2>
 }
 ```
 
@@ -467,7 +465,7 @@ const GameCard = (props: any) => {
 
 <div class="box bad mt-3" v-click="2">
 
-La prop s'appelle `game`, pas `titre` : il fallait écrire `props.game.titre`.
+La prop s'appelle `game`, pas `name` : il fallait écrire `props.game.name`.
 Avec `any`, **TypeScript se tait**. Aucun souligné rouge, juste une page vide.
 
 </div>
@@ -476,12 +474,11 @@ Avec `any`, **TypeScript se tait**. Aucun souligné rouge, juste une page vide.
 
 ```tsx
 type GameCardProps = {
-  game: Game
-  onSelect?: (slug: string) => void
+  game: GameCardType
 }
 
-const GameCard = ({ game, onSelect }: GameCardProps) => {
-  return <h2>{game.titre}</h2>
+const GameCard = ({ game }: GameCardProps) => {
+  return <h2>{game.name}</h2>
 }
 ```
 
@@ -511,17 +508,17 @@ class: code-xs
 
 ```tsx
 type GameCardProps = {
-  titre: string
+  name: string
   note: number
-  nouveau?: boolean
+  isNew?: boolean
 }
 const GameCard = (
-  { titre, note, nouveau }: GameCardProps
+  { name, note, isNew }: GameCardProps
 ) => {
   return (
     <article>
-      <h2>{titre} — {note}/10</h2>
-      {nouveau && <span>NOUVEAU</span>}
+      <h2>{name} — {note}/10</h2>
+      {isNew && <span>NOUVEAU</span>}
     </article>
   )
 }
@@ -539,8 +536,8 @@ import GameCard from '../components/GameCard'
 const HomePage = () => {
   return (
     <div>
-      <GameCard titre="Hades" note={9.5} nouveau />
-      <GameCard titre="Celeste" note={9} />
+      <GameCard name="Hades" note={9.5} isNew />
+      <GameCard name="Celeste" note={9} />
     </div>
   )
 }
@@ -550,7 +547,7 @@ const HomePage = () => {
 <span class="box-label">Trois réflexes</span>
 
 - Le `?` rend la prop **facultative**.
-- Guillemets pour une string, accolades pour le reste : `titre="Hades"` mais `note={9.5}`.
+- Guillemets pour une string, accolades pour le reste : `name="Hades"` mais `note={9.5}`.
 - Un composant ne **modifie jamais** ses props.
 
 </div>
@@ -565,14 +562,14 @@ les UTILISER — c'est le morceau qui leur manque toujours.
 
 Les deux erreurs à guetter au TP :
 - note="9.5" avec des guillemets : c'est alors une string, et les calculs cassent
-- vouloir modifier une prop dans le composant (titre = titre.toUpperCase())
+- vouloir modifier une prop dans le composant (name = name.toUpperCase())
 
 Si quelqu'un connaît Next et écrit `@/components/GameCard` : cet alias n'existe pas
 dans un projet Vite par défaut, il faut le configurer dans vite.config.ts ET
 tsconfig.json. En chemin relatif, ça marche tout de suite.
 
-Question à poser : "et si je veux passer la recette entière plutôt que titre + note ?"
-Réponse : une seule prop `game: Game`. C'est souvent mieux, et c'est ce qu'on fait
+Question à poser : "et si je veux passer le jeu entier plutôt que name + note ?"
+Réponse : une seule prop `game: GameCardType`. C'est souvent mieux, et c'est ce qu'on fait
 partout ailleurs dans le cours.
 -->
 
@@ -619,7 +616,7 @@ sur le mauvais jeu.
 <div v-click="3" class="mt-3">
 
 ```tsx
-<GameCard key={game.slug} game={game} />
+<GameCard key={game.name} game={game} />
 ```
 
 <div class="box rule mt-3">
@@ -650,7 +647,7 @@ class: code-xs
 
 ```tsx
 type GameListProps = {
-  games: Game[]
+  games: GameCardType[]
 }
 
 const GameList = (props: any) => {
@@ -678,7 +675,7 @@ const GameList = ({ games }: GameListProps) => {
   return (
     <div>
       {games.map((game) => (
-        <GameCard key={game.slug} game={game} />
+        <GameCard key={game.name} game={game} />
       ))}
     </div>
   )
@@ -696,9 +693,7 @@ class: code-xs
 ---
 
 <div class="text-center">
-<div class="tag tag-cyan mb-2">Exercice 1</div>
-
-# Les données et la carte <span class="timer ml-3">⏱ 10 minutes</span>
+# <span class="tag tag-cyan mr-3">Exo 1</span>Les données et la carte <span class="timer ml-3">⏱ 10 minutes</span>
 
 </div>
 
@@ -706,9 +701,9 @@ class: code-xs
 
 <div>
 
-1. Dans `types/game.ts`, le type `Game` : titre, studio, année, note
-2. Dans `data/games.ts`, un tableau `games: Game[]`
-3. Remplissez-le avec **les jeux ci-contre** : à vous de trouver le studio, l'année et de mettre votre note
+1. Dans `types/game.ts`, le type `GameCardType` : name, studio, releaseDate, note
+2. Dans `data/games.ts`, un tableau `gameList: GameCardType[]`
+3. Remplissez-le avec **les jeux ci-contre** : à vous de trouver le studio, la date de sortie et de mettre votre note
 4. Un composant `GameCard` avec un type de props explicite. **Au bon endroit.**
 5. Affichez la liste dans `App.tsx`, avec une `key` stable
 
@@ -748,7 +743,7 @@ h1 { font-size: 2rem; margin-bottom: 0.4rem; }
 <!--
 La liste est imposée pour deux raisons : ils ne perdent pas cinq minutes à choisir,
 et tout le monde a les mêmes données à l'écran au moment de la correction.
-Le travail reste le leur : studio, année, note.
+Le travail reste le leur : studio, date de sortie, note.
 
 À DIRE À L'ORAL : la note n'est pas un chiffre, c'est un rang — S, A, B, C ou D.
 Sinon ils partent sur un number et la carte de l'exercice 2 ne collera pas.
@@ -824,7 +819,7 @@ class: code-xs
   border-radius: 12px;
   background: #1e293b;
 }
-.game-card__titre {
+.game-card__name {
   font-weight: 600;
   color: #f8fafc;
 }
@@ -836,7 +831,7 @@ class: code-xs
 
 ```tsx
 <article className="game-card">
-  <h2 className="game-card__titre">{game.titre}</h2>
+  <h2 className="game-card__name">{game.name}</h2>
   <p className="game-card__studio">{game.studio}</p>
 </article>
 ```
@@ -852,7 +847,7 @@ class: code-xs
   className="flex gap-3 p-4 rounded-xl bg-slate-800"
 >
   <h2 className="font-semibold text-slate-50">
-    {game.titre}
+    {game.name}
   </h2>
   <p className="text-sm text-slate-400">
     {game.studio}
@@ -982,11 +977,7 @@ layout: center
 class: text-center
 ---
 
-<div class="tag tag-cyan mb-4">Exercice 2</div>
-
-# Reproduisez cette liste
-
-<div class="timer mt-2">⏱ 12 minutes</div>
+# <span class="tag tag-cyan mr-3">Exo 2</span>Reproduisez cette liste <span class="timer ml-3">⏱ 12 minutes</span>
 
 <div class="flex justify-center gap-8 mt-6 items-start">
 
@@ -1042,14 +1033,14 @@ class: text-center
 Solution :
 <div className="flex flex-col gap-3">
   {games.map((game) => (
-    <article key={game.id}
+    <article key={game.name}
       className="flex items-center gap-4 p-4 rounded-xl bg-slate-800
                  hover:bg-slate-700 transition-colors">
       <div className="grid place-items-center w-10 h-10 rounded-lg
                       bg-rose-500 font-bold text-slate-900">{game.note}</div>
       <div>
-        <h2 className="font-semibold text-slate-50">{game.titre}</h2>
-        <p className="text-sm text-slate-400">{game.studio} · {game.annee}</p>
+        <h2 className="font-semibold text-slate-50">{game.name}</h2>
+        <p className="text-sm text-slate-400">{game.studio} · {game.releaseDate.slice(0, 4)}</p>
       </div>
     </article>
   ))}
@@ -1241,11 +1232,7 @@ layout: center
 class: text-center
 ---
 
-<div class="tag tag-cyan mb-4">Exercice 3</div>
-
-# Trois pages, trois routes
-
-<div class="timer mt-2">⏱ 8 minutes</div>
+# <span class="tag tag-cyan mr-3">Exo 3</span>Trois pages, trois routes <span class="timer ml-3">⏱ 10 minutes</span>
 
 <div class="mt-6 text-left mx-auto w-fit">
 
@@ -1269,7 +1256,7 @@ Erreurs à guetter dans les rangs :
 - element={HomePage} sans chevrons
 - BrowserRouter oublié → "useRoutes() may be used only in the context of a Router"
 - export default oublié dans la page
-Ne rien corriger au tableau avant 6 minutes.
+Ne rien corriger au tableau avant 7 minutes.
 -->
 
 ---
@@ -1327,86 +1314,361 @@ et `className` accepte une fonction.
 </div>
 
 ---
+class: code-xs
+---
 
-# Le menu dupliqué
+# <span class="tag tag-cyan mr-3">Mini-exo</span>Votre barre de navigation <span class="timer ml-3">⏱ 5 minutes</span>
 
-```tsx {all|3,6,9}
-<Routes>
-  <Route path="/" element={
-    <><Menu /><HomePage /><Footer /></>
-  } />
-  <Route path="/tier-list" element={
-    <><Menu /><TierListPage /><Footer /></>
-  } />
-  <Route path="/a-propos" element={
-    <><Menu /><AboutPage /><Footer /></>
-  } />
-</Routes>
+<div class="grid grid-cols-2 gap-5 mt-3">
+
+<div>
+
+<div class="tag tag-violet mb-1">Le squelette d'un lien</div>
+
+```tsx
+<nav className="flex gap-4">
+  <NavLink
+    to="/"
+    end
+    className={({ isActive }) =>
+      isActive ? 'text-white' : 'text-slate-400'
+    }
+  >
+    Accueil
+  </NavLink>
+
+  {/* les deux autres, à vous */}
+</nav>
 ```
-
-<div v-click class="mt-4 box bad">
-
-Trois fois le même menu. À la quinzième route, vous ajoutez un lien et vous en oubliez deux.
-
-Et pire : à chaque navigation le `Menu` est **démonté puis reconstruit**.
 
 </div>
 
-<div v-click class="mt-3 big">La solution : un composant qui contient la partie fixe, avec un trou au milieu.</div>
+<div>
+
+<div class="text-sm">
+
+1. Dans `App.tsx`, **au-dessus** de `<Routes>`, ajoutez ce `<nav>`
+2. Complétez avec `/tier-list` et `/a-propos`
+3. Choisissez vos deux couleurs, actif et inactif
+
+</div>
+
+<div class="box info mt-3">
+<span class="box-label">Ce que fait ce className</span>
+
+Il accepte une **fonction**, pas une chaîne. React Router la rappelle à chaque changement d'URL avec `{ isActive }` : à vous de renvoyer les classes. Zéro `useState`.
+
+</div>
+
+<div class="box trap mt-2">
+<span class="box-label">Le mot-clé <code>end</code></span>
+
+Sans lui, « Accueil » reste allumé **partout** : tous les chemins commencent par `/`.
+
+</div>
+
+</div>
+
+</div>
+
+<style>
+h1 { font-size: 2rem; margin-bottom: 0.4rem; }
+.box { padding-top: 0.55rem; padding-bottom: 0.55rem; }
+</style>
+
+<!--
+Court et volontairement facile : l'objectif n'est pas la difficulté, c'est
+qu'ils AIENT une nav sous les yeux avant qu'on parle de Layout.
+
+Le squelette est donné exprès. Ce qu'on veut leur faire sentir, c'est le
+className-fonction, pas leur faire chercher une syntaxe.
+
+Erreurs à guetter :
+- <a href> par réflexe → la page recharge, ça se voit dans l'onglet Réseau
+- className={isActive ? ...} sans les accolades de déstructuration
+- end oublié sur "/" → les trois liens allumés en même temps, ils ne comprennent pas
+- NavLink pas importé depuis react-router-dom
+
+Ne pas les laisser styler pendant 10 minutes. Deux couleurs suffisent.
+
+Checkpoint : ils cliquent, l'URL change, le lien courant se démarque, et
+l'onglet Réseau ne bouge pas. C'est une SPA.
+-->
 
 ---
+class: code-xs
+---
 
-# Layout et Outlet
+# Ça marche. Et pourtant
 
-<div v-if="$clicks < 2">
+<div class="grid grid-cols-5 gap-5 mt-3">
 
-```tsx {all|7}
-import { Outlet } from 'react-router-dom'
+<div class="col-span-3">
+
+<div class="tag mb-1">Votre App.tsx, maintenant</div>
+
+```tsx
+const App = () => {
+  return (
+    <BrowserRouter>
+      <nav>
+        <NavLink to="/" end className={…}>Accueil</NavLink>
+        <NavLink to="/tier-list" className={…}>Tier list</NavLink>
+        <NavLink to="/a-propos" className={…}>À propos</NavLink>
+      </nav>
+
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/tier-list" element={<TierListPage />} />
+        <Route path="/a-propos" element={<AboutPage />} />
+      </Routes>
+    </BrowserRouter>
+  )
+}
+```
+
+</div>
+
+<div class="col-span-2">
+
+<div class="big mt-4" v-click="1">Ajoutez maintenant un footer, un conteneur, du padding.</div>
+
+<div class="box bad mt-3" v-click="2">
+<span class="box-label">Deux problèmes</span>
+
+`App.tsx` fait **deux métiers** : la table des routes **et** la mise en page.
+
+Et une page qui ne doit **pas** avoir ce cadre — une 404 plein écran — devient impossible.
+
+</div>
+
+<div class="big mt-3" v-click="3">Il faut un cadre, avec un trou où la page s'insère.</div>
+
+</div>
+
+</div>
+
+<!--
+Ne pas enchaîner trop vite. Leur faire dire à voix haute ce qui les gêne
+dans le fichier de gauche. Ils répondent souvent "c'est long" : recadrer sur
+"il fait deux choses", c'est la règle 1 du cours, elle revient ici.
+
+Le deuxième argument est le plus fort : une page SANS le cadre est impossible
+tant que le cadre est dans App. C'est exactement ce que résout Layout.
+-->
+
+---
+class: code-xs
+---
+
+# Étape 1 · Le cadre
+
+<div class="grid grid-cols-2 gap-5 mt-3">
+
+<div>
+
+<div class="tag tag-violet mb-1">components/Layout.tsx</div>
+
+```tsx {all|8}
+import { Outlet, NavLink } from 'react-router-dom'
 
 const Layout = () => {
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100">
-      <Menu />
-      <main className="p-6"><Outlet /></main>
-      <Footer />
+    <div className="min-h-screen p-8">
+      <nav>{/* vos trois NavLink */}</nav>
+
+      <main><Outlet /></main>
+
+      <footer>GameRank</footer>
     </div>
   )
 }
 export default Layout
 ```
 
-<div class="muted text-sm mt-3">La partie fixe, avec un trou au milieu. Reste à dire quelles pages vont dans ce trou.</div>
+</div>
+
+<div>
+
+<v-clicks at="2">
+
+- On **déplace** la nav de `App.tsx` vers ici. Elle n'est plus écrite qu'une fois.
+- `<Outlet />` est un **trou**. Il ne prend aucune prop : il n'y a rien à configurer dedans.
+- Le `Layout` ne connaît **aucune** de vos pages. C'est ce qui le rend réutilisable.
+
+</v-clicks>
+
+<div class="box info mt-3" v-click="5">
+<span class="box-label">Si vous venez de Next</span>
+
+C'est `app/layout.tsx`. Même idée, même rôle. Une seule différence, et elle est de taille :
+Next l'applique **tout seul**, React Router attend que vous le déclariez. C'est l'étape 2.
 
 </div>
 
-<div v-if="$clicks >= 2">
-
-```tsx
-<Routes>
-  <Route path="/" element={<Layout />}>
-    <Route index element={<HomePage />} />
-    <Route path="tier-list" element={<TierListPage />} />
-    <Route path="a-propos" element={<AboutPage />} />
-  </Route>
-</Routes>
-```
-
-<div class="muted text-sm mt-3">La route parente rend le <code>Layout</code>. Les trois enfants s'affichent dans son <code>Outlet</code>.</div>
-
 </div>
-
-<div class="box trap mt-3" v-click="3">
-<span class="box-label">Deux pièges</span>
-
-`index` = la page affichée quand on est **exactement** sur `/`.
-Et les chemins enfants **n'ont pas** de slash devant : ils se collent au parent.
 
 </div>
 
 <!--
-Faire le geste avec les mains : le Layout est un cadre, l'Outlet est le trou.
-Montrer en live dans les devtools React que le Menu n'est pas remonté
-quand on change de page.
+Insister sur "Outlet ne prend aucune prop". C'est LA question qui revient :
+"on configure quoi dedans ?" Rien. C'est un marqueur de position.
+
+L'analogie qui marche : c'est children, sauf que ce n'est pas le parent qui
+passe l'enfant, c'est le routeur, en fonction de l'URL.
+
+À ce stade le Layout existe mais ne s'affiche nulle part. Le dire explicitement,
+sinon ils croient avoir fini.
+-->
+
+---
+class: code-xs
+---
+
+# Étape 2 · Brancher les routes
+
+<div class="grid grid-cols-2 gap-5 mt-3">
+
+<div>
+
+<div class="tag mb-1">Avant</div>
+
+```tsx
+<Route path="/" element={<HomePage />} />
+<Route path="/tier-list" element={<TierListPage />} />
+<Route path="/a-propos" element={<AboutPage />} />
+```
+
+<div class="tag tag-cyan mb-1 mt-3">Après</div>
+
+```tsx
+<Route path="/" element={<Layout />}>
+  <Route index element={<HomePage />} />
+  <Route path="tier-list" element={<TierListPage />} />
+  <Route path="a-propos" element={<AboutPage />} />
+</Route>
+```
+
+</div>
+
+<div>
+
+<v-clicks>
+
+- La route parente **n'est plus auto-fermante** : `<Route …>` … `</Route>`, les enfants dedans. C'est cette imbrication qui crée la relation.
+- Les chemins enfants **perdent leur `/`** : `"tier-list"`, pas `"/tier-list"`. Ils se collent au parent.
+- `HomePage` passe de `path="/"` à **`index`** : l'enfant affiché quand l'URL vaut exactement le chemin du parent.
+
+</v-clicks>
+
+<div class="box info mt-3" v-click="4">
+<span class="box-label">Sur /tier-list, dans l'ordre</span>
+
+`/` gagne → React Router rend `<Layout />` : la nav et le footer.
+Puis `tier-list` gagne → `<TierListPage />` prend la place de l'`<Outlet />`.
+
+</div>
+
+</div>
+
+</div>
+
+<!--
+C'est LA slide de la partie. Ne pas la presser.
+
+Le malentendu numéro un : "je crée Layout.tsx et c'est bon". Non — sans cette
+imbrication, le Layout n'est jamais rendu. Le test à leur donner : mettre une
+bordure rouge dans le Layout, et constater qu'on ne la voit jamais.
+
+La preuve à faire en direct dans les devtools React : la nav n'est PAS remontée
+quand on change de page. C'est ce que le cadre partagé apporte.
+-->
+
+---
+class: code-xs
+---
+
+# Étape 3 · La page détail
+
+<div class="grid grid-cols-2 gap-5 mt-3">
+
+<div>
+
+<div class="tag tag-violet mb-1">pages/GameDetailPage.tsx</div>
+
+```tsx
+const GameDetailPage = () => {
+  return <h1>Une page de jeu</h1>
+}
+export default GameDetailPage
+```
+
+```txt {5}
+src/
+├── components/
+│   └── Layout.tsx
+├── pages/
+│   ├── GameDetailPage.tsx
+│   ├── HomePage.tsx
+│   ├── TierListPage.tsx
+│   └── AboutPage.tsx
+└── App.tsx
+```
+
+<div class="muted text-sm mt-2">Une page, c'est un fichier dans <code>pages/</code>. Exactement comme à l'exercice 3.</div>
+
+</div>
+
+<div>
+
+<div class="tag tag-cyan mb-1" v-click="1">Et on la branche, sous le Layout</div>
+
+<div v-click="1">
+
+```tsx
+<Route path="/" element={<Layout />}>
+  <Route index element={<HomePage />} />
+  <Route path="jeu/hollow-knight"
+    element={<GameDetailPage />} />
+</Route>
+```
+
+</div>
+
+<div class="box trap mt-3" v-click="2">
+<span class="box-label">Créer le fichier ne crée pas la route</span>
+
+Le fichier peut exister, être parfait, et ne **jamais** s'afficher.
+C'est `App.tsx` qui décide des URL, **pas** les noms de vos dossiers.
+
+</div>
+
+<div class="big mt-3" v-click="3">Tapez <code>/jeu/hollow-knight</code> : ça marche.</div>
+
+<div class="big mt-1" v-click="4">Pour <b>un</b> jeu.</div>
+
+</div>
+
+</div>
+
+<!--
+Slide charnière : ils CRÉENT avant qu'on théorise. La friction de la slide suivante
+n'a de valeur que s'ils ont vu leur page s'afficher pour de vrai d'abord.
+
+Deux minutes, pas plus. Le composant est volontairement vide : un h1, rien d'autre.
+Ce n'est pas le sujet, le sujet c'est la route.
+
+L'encadré orange est LE message. Le faire dire à voix haute : créer le fichier ne
+crée pas la route. C'est la différence avec Next, et c'est la panne qu'ils vont vivre —
+fichier créé, URL tapée, page blanche.
+
+Le rangement : le test de la partie 1 s'applique encore. Est-ce que l'utilisateur
+dirait "je suis sur cette page" ? Oui -> pages/. Layout, non -> components/.
+
+Finir sur "pour UN jeu" et s'arrêter là. Les laisser trouver le problème eux-mêmes,
+ne pas enchaîner. Quelqu'un dira "on va pas en écrire 200".
+
+Rappel pour moi : dans ce cours le BrowserRouter est dans App.tsx, pas dans main.tsx.
 -->
 
 ---
@@ -1414,8 +1676,10 @@ quand on change de page.
 # Une route pour tous les jeux
 
 ```tsx
-<Route path="jeux/hollow-knight" element={<GameDetailPage />} />
-<Route path="jeux/hades" element={<GameDetailPage />} />
+<Route path="/" element={<Layout />}>
+  <Route path="jeu/hollow-knight" element={<GameDetailPage />} />
+  <Route path="jeu/hades" element={<GameDetailPage />} />
+</Route>
 ```
 
 <div v-click="1" class="mt-3 box bad">Et pour 200 jeux ? Et quand vous en ajoutez un ?</div>
@@ -1425,161 +1689,268 @@ quand on change de page.
 Les deux points déclarent un **paramètre** : un morceau d'URL qui varie.
 
 ```tsx
-<Route path="jeux/:slug" element={<GameDetailPage />} />
-```
-
-</div>
-
-<div class="flow mt-5" v-click="3">
-  <div class="flow-node"><b>/jeux/hades</b>slug = "hades"</div>
-  <div class="flow-node"><b>/jeux/celeste</b>slug = "celeste"</div>
-  <div class="flow-node"><b>/jeux/nawak</b>slug = "nawak"</div>
-</div>
-
-<div class="mt-4 muted text-sm" v-click="4">
-
-Une seule route, un seul composant, autant de pages que de jeux.
-
-</div>
-
----
-
-# Lire le paramètre : useParams
-
-```tsx {all|5|7|9-11}
-import { useParams } from 'react-router-dom'
-import { games } from '../data/games'
-
-const GameDetailPage = () => {
-  const { slug } = useParams()
-
-  const game = games.find((g) => g.slug === slug)
-
-  if (!game) {
-    return <p>Ce jeu n'existe pas.</p>
-  }
-
-  return <h1>{game.titre}</h1>
-}
-export default GameDetailPage
-```
-
-<div class="box trap mt-3" v-click>
-
-`slug` est de type `string | undefined`, et `find()` renvoie `Game | undefined`.
-D'où le `if (!game)` juste après : il règle les deux cas d'un coup.
-
-</div>
-
----
-
-# Naviguer depuis le code, et gérer le reste
-
-<div class="grid grid-cols-2 gap-4">
-
-<div>
-
-<div class="tag tag-cyan mb-2">useNavigate</div>
-
-```tsx
-const navigate = useNavigate()
-
-<button onClick={() => navigate(-1)}>
-  ← Retour
-</button>
-
-// navigate('/tier-list')  aller à une page
-// navigate(-1)            page précédente
-```
-
-<div class="box rule mt-3" v-click="1">
-<span class="box-label">La règle</span>
-
-L'utilisateur **clique pour aller** quelque part → `Link`.
-Le code décide **après une action** → `useNavigate`.
-
-</div>
-
-</div>
-
-<div>
-
-<div v-click="2">
-
-<div class="tag tag-amber mb-2">La route 404</div>
-
-```tsx
 <Route path="/" element={<Layout />}>
-  <Route index element={<HomePage />} />
-  <Route path="tier-list" element={<TierListPage />} />
-  <Route path="jeux/:slug" element={<GameDetailPage />} />
-  <Route path="*" element={<NotFoundPage />} />
+  <Route path="jeu/:slug" element={<GameDetailPage />} />
 </Route>
 ```
 
 </div>
 
-<div class="box bad mt-3" v-click="3">
+<div class="flow mt-5" v-click="3">
+  <div class="flow-node"><b>/jeu/hades</b>slug = "hades"</div>
+  <div class="flow-node"><b>/jeu/celeste</b>slug = "celeste"</div>
+  <div class="flow-node"><b>/jeu/nawak</b>slug = "nawak"</div>
+</div>
 
-`*` attrape tout le reste. Sans elle, une mauvaise URL affiche une page
-**blanche** et vous cherchez un bug qui n'existe pas.
+<div class="mt-4 muted text-sm" v-click="4">
+
+Une seule route, un seul composant, autant de pages que de jeux.
+Regardez la troisième : **l'URL matche quand même**. On y revient.
 
 </div>
 
-</div>
+<!--
+Ils viennent d'écrire la route en dur. Ici on duplique sous leurs yeux : c'est le
+moment où quelqu'un râle. Laisser venir la râlerie avant de cliquer.
 
-</div>
+La route détail reste ENFANT du Layout : la nav et le footer sont là aussi.
+Le montrer imbriqué à chaque fois, sinon ils la collent à plat et perdent le cadre.
+
+Bien appuyer sur le troisième nœud du schéma : /jeu/nawak matche la route.
+React Router ne vérifie pas que le jeu existe, ce n'est pas son travail.
+C'est le point de départ de la slide sur les pages blanches.
+-->
 
 ---
-layout: center
-class: text-center
+class: code-xs
 ---
 
-<div class="tag tag-amber mb-4">Quiz · 30 secondes</div>
+# Étape 4 · Lire le paramètre
 
-# Page blanche. Pourquoi ?
+<div class="grid grid-cols-2 gap-5 mt-3">
 
-```tsx
-<Routes>
-  <Route path="/" element={<Layout />}>
-    <Route index element={<HomePage />} />
-    <Route path="/tier-list" element={<TierListPage />} />
-  </Route>
-</Routes>
+<div>
+
+<div class="tag tag-violet mb-1">pages/GameDetailPage.tsx</div>
+
+```tsx {all|5|7|9-11}
+import { useParams } from 'react-router-dom'
+import { gameList } from '../data/games'
+
+const GameDetailPage = () => {
+  const { slug } = useParams()
+
+  const game = gameList.find((g) => g.slug === slug)
+
+  if (!game) {
+    return <p>Ce jeu n'existe pas.</p>
+  }
+
+  return <h1>{game.name}</h1>
+}
+export default GameDetailPage
 ```
 
-<div v-click class="mt-6">
+<div class="box trap mt-2" v-click="3">
+<span class="box-label">Ne sautez pas ce if</span>
 
-<div class="box info text-left">
-
-Le **slash** devant `tier-list`. Dans une route imbriquée, le chemin se colle au parent :
-ça donne `//tier-list`, que personne n'atteindra jamais.
-
-Aucune erreur affichée. Aucun warning. Juste une page vide.
-Retenez-le, vous le ferez au moins une fois.
+Sans lui, `/jeu/nawak` fait planter la page — et TypeScript vous y oblige de toute façon.
 
 </div>
 
 </div>
 
+<div>
+
+<v-clicks at="1">
+
+- Les clés de `useParams()` sont **les noms déclarés dans la route** : `jeu/:slug` donne `{ slug }`.
+- React Router transmet une **chaîne**. Il ne connaît pas vos jeux : à vous de retrouver la donnée.
+
+</v-clicks>
+
+<div class="box rule mt-2" v-click="2">
+<span class="box-label">Rouge sous g.slug ? C'est normal</span>
+
+Votre type `GameCardType` n'a pas de champ `slug`. Ajoutez-le, puis remplissez-le dans
+`data/games.ts` : minuscules, sans accent, tirets.
+
+`"Pokémon Champions"` → `"pokemon-champions"`
+
+</div>
+
+</div>
+
+</div>
+
+<!--
+Le "il transmet une chaîne, il ne connaît pas vos jeux" débloque beaucoup de monde :
+ils croient que le routeur va chercher la donnée. Non, il donne un morceau d'URL.
+
+C'est TypeScript qui pose le problème du slug, pas moi : ils écrivent g.slug, ça
+souligne en rouge, et là seulement on explique ce qu'est un slug. Ne pas dégainer
+avant le souligné rouge — la question doit venir d'eux.
+
+Pourquoi pas l'id ? /jeu/3 fonctionne, mais l'URL ne dit plus rien à personne.
+Rappel de la slide "Le problème" : l'URL est un état, et un état qui se lit.
+Pourquoi pas le titre ? /jeu/God%20of%20War%20Ragnar%C3%B6k. Ça suffit comme réponse.
+
+Faire le lien avec Next si la question vient : ici useParams est synchrone,
+ce n'est pas une Promise.
+-->
+
+---
+class: code-xs
+---
+
+# Cliquer sur une carte
+
+<div class="grid grid-cols-2 gap-5 mt-3">
+
+<div>
+
+<div class="mock">
+  <div class="mock-bar">
+    <div class="mock-dot"></div><div class="mock-dot"></div><div class="mock-dot"></div>
+    <div class="mock-url">localhost:5173<b>/tier-list</b></div>
+  </div>
+  <div class="mock-body">
+    <div class="mock-nav">
+      <span>Accueil</span><span class="on">Tier list</span><span>À propos</span>
+    </div>
+    <div class="tier tier-s">
+      <div class="tier-badge">S</div>
+      <div class="tier-games">
+        <span class="chip">Hollow Knight</span><span class="chip">Hades</span><span class="chip">Celeste</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="big mt-4">La page existe, l'URL marche.<br/>Reste à pouvoir y aller <b>en cliquant</b>.</div>
+
+<div class="box good mt-4" v-click="2">
+<span class="box-label">Le test qui prouve tout</span>
+
+Copiez l'URL, collez-la dans un nouvel onglet. La bonne page s'affiche.
+**Ça, un `useState` ne l'a jamais fait.**
+
+</div>
+
+</div>
+
+<div>
+
+<div class="tag tag-cyan mb-1">Là où vous affichez vos cartes</div>
+
+```tsx
+<Link to={`/jeu/${game.slug}`}>
+  <GameCard game={game} />
+</Link>
+```
+
+<v-clicks at="1">
+
+- Le `Link` **enveloppe** la carte, il ne la remplace pas. `GameCard` ne connaît toujours pas le routeur — c'est la règle 1, une dernière fois.
+
+</v-clicks>
+
+</div>
+
+</div>
+
+<!--
+Dernière brique, et la boucle est bouclée : URL -> paramètre -> donnée -> page,
+et maintenant un clic produit l'URL.
+
+Le Link ENVELOPPE la carte. S'ils mettent le Link DANS GameCard, le composant devient
+dépendant du routeur et n'est plus réutilisable hors router. C'est la règle 1.
+
+Finir sur l'encadré vert et le laisser à l'écran : c'est la réponse à la slide
+"Le problème" de tout à l'heure. L'URL est un état. Ils viennent de le fabriquer.
+-->
+---
+class: code-xs
+---
+
+# Les trois pages blanches
+
+<div class="muted -mt-3 mb-3 text-sm">aucune erreur, aucun warning, juste du vide — votre checklist de debug</div>
+
+<div class="grid grid-cols-3 gap-4">
+
+<div class="box bad">
+<span class="box-label">1 · Le slash de trop</span>
+
+```tsx
+<Route path="/" element={…}>
+  <Route path="/tier-list" … />
+</Route>
+```
+
+Le chemin enfant se colle au parent : ça donne `//tier-list`, que personne n'atteindra jamais.
+
+</div>
+
+<div class="box bad" v-click="1">
+<span class="box-label">2 · Aucune route ne matche</span>
+
+```tsx
+<Route path="*"
+  element={<NotFoundPage />} />
+```
+
+Sans elle, une URL inconnue n'affiche **rien**. `*` attrape tout le reste : mettez-la toujours, en dernier.
+
+</div>
+
+<div class="box bad" v-click="2">
+<span class="box-label">3 · La donnée est introuvable</span>
+
+```tsx
+const game = gameList.find(…)
+if (!game) return <p>…</p>
+```
+
+L'URL matche, la page se monte, mais `find()` rend `undefined`. Le `if` transforme le vide en message.
+
+</div>
+
+</div>
+
+<div class="box rule mt-4" v-click="3">
+<span class="box-label">Et pour renvoyer l'utilisateur ailleurs</span>
+
+`useNavigate` : `const navigate = useNavigate()`, puis `navigate('/tier-list')`, ou `navigate(-1)` pour la page précédente.
+La règle : l'utilisateur **clique pour aller** quelque part → `Link`. Le code **décide après une action** → `useNavigate`.
+
+</div>
+
+<!--
+Cette slide est une checklist de debug, pas un cours. Leur dire de la
+photographier : ils la ressortiront pendant le TP.
+
+Les trois causes sont dans l'ordre où elles arrivent en vrai. La première est
+celle qu'ils feront tous à l'exercice 4 — ne la corriger qu'au bout de deux
+minutes de galère, elle ne s'oublie pas quand on l'a vécue.
+
+useNavigate est cité, pas développé. S'ils veulent un exemple : le bouton
+"← Retour" de la page détail, c'est navigate(-1).
+-->
 ---
 layout: center
 class: text-center
 ---
 
-<div class="tag tag-cyan mb-4">Exercice 4</div>
-
-# Le layout et la page détail
-
-<div class="timer mt-2">⏱ 12 minutes</div>
+# <span class="tag tag-cyan mr-3">Exo 4</span>Le layout et la page détail <span class="timer ml-3">⏱ 12 minutes</span>
 
 <div class="mt-6 text-left mx-auto w-fit">
 
-1. `components/Layout.tsx` : un `<nav>`, un `<Outlet />`, un `<footer>`
-2. Vos trois liens en `NavLink`, avec un style Tailwind sur le lien actif
-3. Passez vos routes en **routes imbriquées** sous le `Layout`
-4. Ajoutez `jeux/:slug` → `GameDetailPage` avec `useParams`
-5. Chaque `GameCard` devient un `Link` vers son détail
+1. `components/Layout.tsx` : **déplacez-y votre nav**, ajoutez un `<Outlet />` et un `<footer>`
+2. Passez vos routes en **routes imbriquées** sous le `Layout` — `index`, et pas de slash devant
+3. **Créez** `pages/GameDetailPage.tsx` et branchez-la sur `jeu/:slug`, toujours sous le `Layout`
+4. Ajoutez le champ `slug` au type `GameCardType` et à vos six jeux, puis lisez-le avec `useParams` — sans oublier le cas introuvable
+5. Enveloppez chaque `GameCard` dans un `Link` vers `/jeu/<son slug>`
 6. Une route `*` → `NotFoundPage`, et testez `/nawak`
 
 </div>
@@ -1587,18 +1958,23 @@ class: text-center
 <div class="mt-6 box good text-left">
 <span class="box-label">Checkpoint</span>
 
-Vous copiez l'URL `/jeux/hollow-knight`, vous la collez dans un nouvel onglet :
+Vous copiez l'URL `/jeu/hollow-knight`, vous la collez dans un nouvel onglet :
 la bonne page s'affiche. Et le menu ne clignote jamais quand vous naviguez.
 
 </div>
 
 <!--
 L'exercice le plus formateur de la séance. Circuler beaucoup.
-Erreurs fréquentes :
-- slash devant la route enfant → page blanche (ils viennent de voir le quiz,
-  leur rappeler seulement s'ils sèchent plus de 2 minutes)
-- oubli des backticks dans to={`/jeux/${game.slug}`}
+La nav existe déjà depuis le mini-exercice : ici ils la DÉPLACENT, ils ne la
+réécrivent pas. Le dire, sinon la moitié repart de zéro.
+
+Erreurs fréquentes, toutes dans la slide "Les trois pages blanches" :
+- slash devant la route enfant → page blanche. Les renvoyer à la checklist
+  plutôt que de corriger : c'est l'exercice le plus formateur de la séance
 - index oublié sur la route d'accueil
+- oubli des backticks dans to={`/jeu/${game.slug}`}
+- le slug oublié sur un jeu → sa carte pointe vers /jeu/undefined
+- le Layout créé mais les routes non imbriquées → on ne le voit jamais
 -->
 
 ---
@@ -1632,7 +2008,7 @@ Erreurs fréquentes :
 
 <div class="box">
 
-### Routage
+### Routage et navigation
 
 - `BrowserRouter` une fois, en haut
 - `Routes` choisit **une** route
@@ -1657,25 +2033,27 @@ L'URL est un état : le seul que l'utilisateur peut copier, partager et recharge
 
 # Le TP
 
-<div class="muted -mt-3 mb-4 text-sm">2 heures · vous repartez de votre GameRank</div>
+<div class="muted -mt-3 mb-4 text-sm">2 heures · le carnet de recettes · un projet neuf, de zéro</div>
 
 <div class="grid grid-cols-2 gap-5">
 
 <div class="box">
 
-### Le minimum
+### Les quatre pages
 
 <div class="mt-3 text-sm">
 
-**1 · La page détail, pour de vrai**<br/>
-Elle existe déjà. Remplissez-la et soignez-la : studio, année, description, jaquette.
+**1 · La liste** — `/recettes`<br/>
+Vos recettes en cartes. Données locales et typées, une carte réutilisable.
 
-**2 · Une deuxième tier list : la difficulté**<br/>
-Un nouveau champ dans le type `Game`, une nouvelle page.
+**2 · Le détail** — `/recette/:slug`<br/>
+Ingrédients, étapes, temps de préparation. Sans oublier le cas introuvable.
 
-**3 · Une troisième page, au choix**<br/>
-`/compare/:a/:b` le duel · `/stats` les chiffres<br/>
-`/tier/:tier` un écran par rang · `/aleatoire` la surprise
+**3 · Le regroupement** — `/categorie/:nom`<br/>
+Entrées, plats, desserts. Une seule route, autant de pages que de catégories.
+
+**4 · La 404** — `path="*"`<br/>
+En dernier, et testez-la pour de vrai.
 
 </div>
 
@@ -1687,11 +2065,12 @@ Un nouveau champ dans le type `Game`, une nouvelle page.
 
 <div class="mt-3 text-sm">
 
-- Le style est **libre**. Soyez créatifs.
+- **Projet neuf.** `npm create vite@latest`. On ne prolonge pas GameRank : vous recâblez le router et le `Layout` vous-mêmes.
+- `Layout` + `Outlet` + une nav en `NavLink`, comme en cours.
+- Le style est **libre**, en Tailwind. Soyez créatifs.
 - Librairies autorisées, sauf les kits de composants tout faits.
-- L'IA pour **le contenu**, jamais pour le code.
-- Date de sortie et studio doivent être **exacts**. Vérifiez-les.
-- Les trois règles du cours s'appliquent aussi ici : un composant une seule chose, des props typées, une `key` stable.
+- L'IA pour **le contenu** — les recettes, les descriptions. Jamais pour le code.
+- Les trois règles du cours s'appliquent : un composant une seule chose, des props typées, une `key` stable.
 
 </div>
 
@@ -1700,11 +2079,20 @@ Un nouveau champ dans le type `Game`, une nouvelle page.
 </div>
 
 <!--
-Insister sur deux choses au moment de lancer le TP :
-- la page détail EXISTE déjà (exercice 4), le travail c'est le contenu et le soin
-- le champ difficulte ajouté au type Game va faire hurler TypeScript sur les 20 jeux
-  du tableau tant qu'ils ne l'ont pas rempli partout. C'est normal, c'est même le sujet.
+Le sujet est un projet NEUF, et c'est tout l'intérêt : s'ils prolongeaient GameRank,
+ils ne réécriraient jamais le BrowserRouter, le Layout et l'Outlet — c'est-à-dire
+exactement ce qui a besoin d'être refait une deuxième fois pour rentrer.
+Le dire explicitement au lancement, sinon la moitié va vouloir ajouter une page à GameRank.
 
-La troisième page au choix : leur dire de ne PAS toutes prendre la même,
-on regarde les rendus ensemble à la fin.
+Les deux paramètres de route sont volontaires : :slug pour le détail, :nom pour la
+catégorie. Ils rencontrent useParams sur deux routes différentes, pas une seule.
+
+Le slug se fabrique à la main dans les données, comme en cours : minuscules, sans
+accent, tirets. "Tarte Tatin" -> "tarte-tatin".
+
+L'IA pour le contenu : qu'ils s'en servent pour écrire vingt recettes crédibles en
+cinq minutes. Le temps gagné là doit passer dans le routage et le style, pas ailleurs.
+
+La page de regroupement est celle qu'ils sous-estiment : leur rappeler qu'une catégorie
+inexistante doit se comporter comme un jeu inexistant. C'est le même if.
 -->

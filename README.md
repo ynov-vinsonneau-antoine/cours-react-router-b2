@@ -1,6 +1,6 @@
 # GameRank — Bonnes pratiques, Tailwind et routage
 
-Cours 2h, React + TypeScript. 37 slides, 5 exercices machine, 2 quiz.
+Cours 2h, React + TypeScript. 40 slides, 5 exercices machine + 1 mini-exercice, 2 quiz.
 
 Fil rouge : **GameRank**, la tier list des jeux préférés des élèves.
 Données locales dans un `games.ts` typé, aucun appel réseau.
@@ -29,8 +29,8 @@ npm run dev          # http://localhost:3030
 | 1 | Bonnes pratiques | 8–14 · **exo 15** | 28 min |
 | 2 | Tailwind CSS | 16–20 · **exo 21** | 27 min |
 | | Pause | 22 | 10 min |
-| 3 | Routage et navigation | 23–34 · **exos 27 et 35** | 60 min |
-| | Récap et TP | 36–37 | 5 min |
+| 3 | Routage et navigation | 23–37 · **exos 27, 29 et 38** | 72 min |
+| | Récap et TP | 39–40 | 5 min |
 
 Le projet se monte **avant** les bonnes pratiques : dès la minute 20, ils ont un
 projet qui tourne et peuvent essayer chaque règle en direct. Et si quelqu'un a un
@@ -53,21 +53,25 @@ souci de Node ou de `npm`, tu le découvres tôt, pas à mi-parcours.
 | 25 | SPA vs site classique + **démo devtools** |
 | 26 | Les trois briques |
 | 28 | `Link` et `NavLink` |
-| 29–30 | Le menu dupliqué → `Layout` + `Outlet` |
-| 31–32 | Route `:slug` puis `useParams` |
-| 33 | `useNavigate` et la route 404 |
-| 34 | Quiz · page blanche, pourquoi ? |
-| 37 | **Le sujet du TP** |
+| 30 | **Ça marche. Et pourtant** — pourquoi le Layout devient nécessaire |
+| 31–32 | Le Layout en deux étapes : le cadre, puis les routes imbriquées |
+| 33 | **Étape 3 · La page détail** — ils créent la page, puis sa route en dur. « Créer le fichier ne crée pas la route » |
+| 34 | **Une route pour tous les jeux** — la friction, puis `:slug` |
+| 35 | Étape 4 · Lire le paramètre — `useParams`, le champ `slug`, le cas introuvable |
+| 36 | **Cliquer sur une carte** — le `Link` et son template literal |
+| 37 | **Les trois pages blanches** — la checklist de debug, + `useNavigate` |
+| 40 | **Le sujet du TP** |
 
 ## Les cinq exercices
 
 | Slide | Exercice | Durée | Livrable |
 |---|---|---|---|
 | 7 | **Exo 0** — Créer le projet | 10 min | Vite + TS + Tailwind, les 5 dossiers, `npm run dev` qui tourne |
-| 15 | **Exo 1** — Les données et la carte | 10 min | Le type `Game`, `games.ts` rempli avec les 6 jeux imposés, un `GameCard` typé au bon endroit |
+| 15 | **Exo 1** — Les données et la carte | 10 min | Le type `GameCardType`, `games.ts` rempli avec les 6 jeux imposés, un `GameCard` typé au bon endroit |
 | 21 | **Exo 2** — Reproduire la liste en Tailwind | 12 min | Les cartes affichées sur la slide, en Tailwind seul |
-| 27 | **Exo 3** — Trois pages, trois routes | 8 min | Les 3 URL répondent |
-| 35 | **Exo 4** — Le layout et la page détail | 12 min | `Outlet`, routes imbriquées, `/jeux/:slug`, 404 |
+| 27 | **Exo 3** — Trois pages, trois routes | 10 min | Les 3 URL répondent |
+| 29 | **Mini-exo** — Votre barre de navigation | 5 min | Trois `NavLink` dans `App.tsx`, lien actif stylé |
+| 38 | **Exo 4** — Le layout et la page détail | 12 min | `Outlet`, routes imbriquées, `/jeu/:slug`, 404 |
 
 L'exo 0 est de la plomberie pure. L'exo 1 est celui qui **applique les trois règles** —
 c'est là qu'il faut circuler et poser des questions plutôt que corriger.
@@ -86,24 +90,52 @@ Attends vraiment 20 secondes avant de cliquer, même si c'est silencieux.
 
 La slide 12 est l'exception : c'est la seule slide « démonstration » de la partie 1.
 Elle complète la règle 2 en montrant le **côté appelant**
-(`<GameCard titre="Hades" note={9.5} />`), que la slide 11 ne montre jamais.
+(`<GameCard name="Hades" note={9.5} />`), que la slide 11 ne montre jamais.
 
-## Le TP — slide 37
+## La progression de la partie 3
+
+L'ordre est délibéré : **on fabrique, ça devient encombrant, on factorise.**
+
+| Slide | Rôle |
+|---|---|
+| 28 | `Link` / `NavLink` — les outils |
+| **29** | **Mini-exo** : ils écrivent la nav dans `App.tsx`. Il faut qu'elle existe avant la suite. |
+| 30 | On regarde leur `App.tsx` : il fait deux métiers, et une page sans le cadre est impossible |
+| 31 | Étape 1 — le `Layout` avec son `<Outlet />` |
+| 32 | Étape 2 — imbriquer les routes. **C'est ici que ça se joue** |
+| 33 | Étape 3 — **ils créent la page détail** et la routent en dur. Ça marche, pour un jeu |
+| 34 | La friction : dupliquer la route pour chaque jeu. Puis `:slug` |
+| 35 | Étape 4 — `useParams`. C'est **TypeScript** qui réclame le champ `slug`, pas moi |
+| 36 | Le `Link` : le clic produit l'URL. La boucle est bouclée |
+| 37 | Les trois pages blanches — la checklist qu'ils ressortiront au TP |
+
+La version précédente présentait le problème du « menu dupliqué » **avant** qu'ils
+aient écrit le moindre menu : la douleur était racontée, pas vécue, et le `Layout`
+tombait comme une abstraction. Le mini-exercice de la slide 29 est ce qui rend
+tout le reste concret — ne pas le sauter.
+
+Les deux malentendus à désamorcer, tous deux dans les notes :
+
+- « On configure quoi dans l'`Outlet` ? » **Rien.** C'est un marqueur de position.
+- « J'ai créé `Layout.tsx`, c'est bon. » **Non** — sans l'imbrication des routes,
+  il n'est jamais rendu. Le test : une bordure rouge dans le `Layout`, qu'on ne voit jamais.
+
+## Le TP — slide 40
 
 Sujet retenu : **le carnet de recettes**, un projet neuf, refait de A à Z, pour
 qu'ils recâblent eux-mêmes le router et le layout au lieu de prolonger GameRank.
 
-- une page liste, une page détail en `/recettes/:slug`, une page de regroupement, une 404
+- `/recettes` la liste, `/recette/:slug` le détail, `/categorie/:nom` le regroupement, `path="*"` la 404
 - `Layout` + `Outlet` + nav en `NavLink`, le tout en Tailwind
 - style libre, librairies autorisées sauf les kits de composants tout faits
 - l'IA pour **le contenu**, jamais pour le code
 
-**La slide 37 présente encore l'ancienne version du TP (GameRank v2). Elle est à
-réécrire en carnet de recettes.**
+Les deux paramètres de route sont volontaires : `:slug` sur le détail, `:nom` sur la
+catégorie. Ils rencontrent `useParams` sur deux routes différentes, pas une seule.
 
 ## Timing
 
-À plein régime le deck fait **~145 min** pour un créneau de 120. C'est assumé :
+À plein régime le deck fait **~157 min** pour un créneau de 120. C'est assumé :
 tu accélères en direct là où le groupe suit, et tu t'attardes où ça coince.
 
 Les leviers, du plus rentable au moins :
@@ -171,7 +203,9 @@ de `slides.md`.
   (`const HomePage = () => { ... }`), jamais `function HomePage()`. C'est ce que
   génère `rafce` et c'est la façon dont tu codes en direct — ne pas mélanger les deux formes.
 - `<v-clicks>` révèle une liste élément par élément, `v-click` révèle un `<div>`
-- une fence de code avec `{all|1|2-3}` révèle le code progressivement au fil des clics
+- une fence de code avec `{all|1|2-3}` révèle le code progressivement au fil des clics.
+  L'étape `all` marque *toutes* les lignes comme surlignées ; `style.css` neutralise ce cas
+  précis pour que le premier état ne s'affiche pas entièrement en violet.
 - Classes maison : `.box` + `.bad` / `.good` / `.rule` / `.trap` / `.info`,
   `.tag`, `.timer`, `.mock`, `.tier`, `.flow`, `.demo-card`
 - `class: code-xs` en frontmatter de slide réduit la taille du code (slides à deux colonnes)
@@ -185,7 +219,7 @@ un index plus petit qu'au parent, donc le parent reste invisible pendant que ses
 La parade est d'aplatir avec des index explicites — un `v-click="1"` sur le bloc parent,
 puis un `<v-clicks at="2">` pour la liste.
 
-**2. Les seuils de `v-if="$clicks < n"`.** Six slides (10, 11, 13, 24, 26, 30) font
+**2. Les seuils de `v-if="$clicks < n"`.** Cinq slides (10, 11, 13, 24, 26) font
 disparaître leur premier bloc de code au reveal, via un seuil écrit en dur.
 Si tu **ajoutes un clic** sur une de ces slides, mets le seuil à jour, sinon le code
 disparaît au mauvais moment.

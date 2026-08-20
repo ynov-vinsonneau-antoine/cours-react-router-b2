@@ -22,7 +22,7 @@ C'est la seule idée à retenir : **React Router ne devine rien**.
   <Route path="/" element={<Layout />}>
     <Route index element={<HomePage />} />
     <Route path="tier-list" element={<TierListPage />} />
-    <Route path="jeux/:slug" element={<GameDetailPage />} />
+    <Route path="jeu/:slug" element={<GameDetailPage />} />
     <Route path="*" element={<NotFoundPage />} />
   </Route>
 </Routes>
@@ -37,7 +37,7 @@ s'étonner que `/a-propos` renvoie la 404. En Next ça aurait marché.
 
 | Besoin | Next.js | React Router v6 |
 |---|---|---|
-| Segment dynamique | dossier `[slug]` | `path="jeux/:slug"` |
+| Segment dynamique | dossier `[slug]` | `path="jeu/:slug"` |
 | Attrape-tout | dossier `[...slug]` | `path="*"` |
 | Layout partagé | `app/layout.tsx`, imbriqué automatiquement | un composant `Layout` + `<Outlet />`, imbriqué **à la main** |
 | Page d'index d'un dossier | `page.tsx` | `<Route index element={...} />` |
@@ -94,7 +94,7 @@ Elle ne produit pas toujours un message clair.
 ```
 
 Les chemins enfants se **concatènent** au parent : ça donne `//tier-list`.
-Aucune erreur, aucun warning, page blanche. C'est le quiz de la slide 34.
+Aucune erreur, aucun warning, page blanche. C'est la cause numéro 1 de la slide 37.
 
 **4. `useParams()` renvoie `string | undefined`**
 
@@ -104,7 +104,7 @@ manquant — ce qui est une bonne chose, mais ça les surprend.
 
 **5. Le déploiement d'une SPA casse les liens profonds**
 
-`/jeux/hades` tapé directement dans la barre d'adresse renvoie une 404 **serveur**,
+`/jeu/hades` tapé directement dans la barre d'adresse renvoie une 404 **serveur**,
 parce qu'aucun fichier ne s'appelle comme ça. Il faut une règle de rewrite
 vers `index.html` (`vercel.json`, `_redirects` sur Netlify, `try_files` sur nginx).
 Next gère ça tout seul. Ça n'est pas dans le cours, mais si un élève déploie, il tombera dessus.
@@ -131,7 +131,7 @@ Le plus rentable, dans cet ordre :
    à la main. Le simple fait de le faire une fois te vaccine.
 2. Écrire un `Layout` + `<Outlet />` et sentir la différence avec `app/layout.tsx` :
    ici c'est **toi** qui décides quelles routes sont dans quel layout.
-3. Faire une page `/jeux/:slug` avec `useParams` + un `find` sur un tableau local,
+3. Faire une page `/jeu/:slug` avec `useParams` + un `find` sur un tableau local,
    et gérer le cas introuvable.
 
 C'est exactement les exercices 3 et 4 du cours. En les faisant toi-même une fois,
